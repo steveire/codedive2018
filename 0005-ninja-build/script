@@ -1,0 +1,21 @@
+mkdir build 
+cd build
+cmake .. -G Ninja -DCMAKE_CXX_COMPILER=/home/steveire/dev/prefix/clang/bin/clang-tidy
+
+~/dev/src/ninjatracing/ninjatracing .ninja_log > trace.json
+
+mkdir icecream
+cd icecream
+cmake .. -G Ninja -DCMAKE_CXX_COMPILER=clang
+
+mkdir env
+cd env
+../icecc-create-clang-tidy-env --clang $HOME/dev/prefix/clang/bin/clang /usr/lib/icecc/compilerwrapper --addfile $HOME/dev/src/llvm/build/compile_commands.json
+tar xzf clang-tidy.tar.gz
+export ICECC_VERSION=$PWD/clang-tidy.tar.gz
+export PATH=/home/steveire/dev/prefix/icecream/libexec/icecc/bin:$PWD/usr/bin:$PATH
+
+icemon
+
+~/dev/prefix/icecream/sbin/icecc-scheduler -vvv
+~/dev/prefix/icecream/sbin/iceccd

@@ -1,0 +1,26 @@
+export PATH=/home/steveire/dev/src/llvm/build/bin:$PATH
+
+clang-query funcs.cpp --
+
+m functionDecl()
+
+set bind-root false
+set bind-root true
+
+m functionDecl(hasName("foo"))
+m functionDecl(hasName("bat"))
+m functionDecl(hasName("ba"))
+m functionDecl(matchesName("ba"))
+
+m functionDecl(hasName("bat"), <TAB>)
+m functionDecl(hasName("bat"), parameterCountIs(0))
+m functionDecl(hasName("foo"), parameterCountIs(1))
+
+enable output matcher 
+m functionDecl()
+
+m binaryOperator()
+
+m callExpr()
+
+m functionDecl(hasName("foo"))
